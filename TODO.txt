@@ -1,0 +1,37 @@
+# Refactoring
+[ ] Add comprehensive type hints and make mypy pass in strict mode (`mypy dndgame --strict`)
+    [ ] Add proper types for all class attributes
+    [ ] Add return types and parameter types for all methods
+    [ ] Fix any type-related issues mypy finds
+
+[ ] Add complete docstrings
+    [ ] Class docstrings explaining purpose and attributes
+    [ ] Method docstrings with parameters and return types
+    [ ] Add examples in docstrings where helpful
+
+[ ] Code is not optimized for adding a new character race. Fix this, and add a new character.
+
+[ ] Input validation for user input
+
+[ ] Improve OOP Structure:
+    [ ] Create an Enemy class
+    [ ] Refactor Character and Enemy classes to use a common Entity base class
+    [ ] Update the Combat class to use the new classes
+    [ ] Replace simple_combat function with Combat class usage.
+    [ ] Ensure that the Goblin also attacks the player. What happens if the player has 0 HP?
+
+[ ] Convert loops to functional programming
+    [ ] Use list comprehensions where appropriate
+    [ ] Use map()/filter() where appropriate
+
+# Testing
+[ ] Add comprehensive unit tests (have a look at the test_dice.py file for inspiration)
+    [ ] Test the character class
+    [ ] Test the combat system
+    [ ] Achieve at least 90% test coverage
+
+# Optional Stretch Goals
+[ ] Add different weapon types with different damage dice
+[ ] Add simple spellcasting system
+[ ] Add an experience points and leveling system
+[ ] (Advanced) Create a DungeonMaster class which uses OpenAI's API to narrate the game (start simple with just narrating the comabt, extend it to narrate the choices and actions of the players)
