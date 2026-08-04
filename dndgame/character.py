@@ -67,9 +67,8 @@ class Character(Entity):
         The bonus mapping is looked up by race name and applied generically
         to each listed ability score.
         """
-        bonuses = RACIAL_BONUSES.get(self.race)
-        if bonuses is None:
-            return
-
-        for stat, bonus in bonuses.items():
-            self.stats[stat] += bonus
+        bonuses = RACIAL_BONUSES.get(self.race, {})
+        self.stats = {
+            stat: value + bonuses.get(stat, 0)
+            for stat, value in self.stats.items()
+        }

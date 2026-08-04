@@ -61,7 +61,9 @@ def create_character() -> Character:
     print("\nChoose your race:")
     for index, race_name in enumerate(RACIAL_BONUSES, start=1):
         bonuses = RACIAL_BONUSES[race_name]
-        bonus_text = ", ".join(f"+{amount} {stat}" for stat, amount in bonuses.items())
+        bonus_text = ", ".join(
+            map(lambda pair: f"+{pair[1]} {pair[0]}", bonuses.items())
+        )
         print(f"{index}. {race_name} ({bonus_text})")
 
     race_choice = prompt_menu_choice(
