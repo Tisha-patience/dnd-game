@@ -4,6 +4,8 @@ from typing import Dict
 
 from dndgame.dice import roll
 
+from .entity import Entity
+
 
 RACIAL_BONUSES: dict[str, dict[str, int]] = {
     "Dwarf": {"CON": 2},
@@ -20,16 +22,13 @@ RACIAL_BONUSES: dict[str, dict[str, int]] = {
 }
 
 
-class Character:
+class Character(Entity):
     """Represent a playable character in the game.
 
     Attributes:
-        name: Character's display name.
+        
         race: Character race used to apply racial bonuses.
-        stats: Mapping of ability score names to their current values.
-        base_hp: Base hit points before racial and constitution modifiers.
-        hp: Current hit points.
-        max_hp: Maximum hit points.
+        
         level: Character level.
         armor_class: Armor class used for combat.
     """
@@ -38,29 +37,14 @@ class Character:
         """Initialize a character with basic state.
 
         Args:
-            name: The character's name.
+
             race: The character's race.
             base_hp: The character's base hit point value.
         """
-        self.name: str = name
+        super().__init__(name, base_hp)
         self.race: str = race
-        self.stats: Dict[str, int] = {}
-        self.base_hp: int = base_hp
-        self.hp: int = 0
-        self.max_hp: int = 0
         self.level: int = 1
-        self.armor_class: int = 10
-
-    def get_modifier(self, stat: str) -> int:
-        """Calculate the modifier for a named ability score.
-
-        Args:
-            stat: The ability score name, such as "STR" or "CON".
-
-        Returns:
-            The ability modifier derived from the score.
-        """
-        return (self.stats[stat] - 10) // 2
+        
 
     def roll_stats(self) -> None:
         """Roll ability scores and initialize hit points.
