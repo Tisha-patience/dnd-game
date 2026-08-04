@@ -66,3 +66,44 @@ class Combat:
             defender.hp -= damage
             return damage
         return 0
+
+    def start(self) -> bool:
+        """Run combat until someone dies or the player flees."""
+
+        print(f"\nA {self.enemy.name} appears!")
+
+        while self.player.is_alive() and self.enemy.is_alive():
+            print(f"\n{self.enemy.name} HP: {self.enemy.hp}")
+            print(f"{self.player.name} HP: {self.player.hp}")
+
+            print("\n1. Attack")
+            print("2. Run away")
+
+            choice = int(input("Choice: "))
+
+            if choice == 2:
+                return False
+
+            damage = self.attack(self.player, self.enemy)
+
+            if damage:
+                print(f"You hit for {damage} damage!")
+            else:
+                print("You missed!")
+
+            if not self.enemy.is_alive():
+                print(f"{self.enemy.name} was defeated!")
+                return True
+
+            damage = self.attack(self.enemy, self.player)
+
+            if damage:
+                print(f"{self.enemy.name} hits you for {damage} damage!")
+            else:
+                print(f"{self.enemy.name} misses!")
+
+            if not self.player.is_alive():
+                print("You have been defeated!")
+                return False
+
+        return False

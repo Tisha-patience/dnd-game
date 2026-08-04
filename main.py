@@ -4,6 +4,8 @@ from typing import Any
 
 from dndgame.character import Character, RACIAL_BONUSES
 from dndgame.dice import roll
+from dndgame.enemy import Enemy
+from dndgame.combat import Combat
 
 
 def prompt_non_empty_input(prompt: str) -> str:
@@ -90,40 +92,6 @@ def display_character(character: Character) -> None:
     print(f"\nHP: {character.hp}")
 
 
-def simple_combat(player: Character) -> bool:
-    """Run a simple combat loop against a goblin.
-
-    Args:
-        player: The player's character.
-
-    Returns:
-        True if the player defeats the goblin, False if they flee.
-    """
-    print("\nA goblin appears!")
-    goblin_hp = 5
-
-    while goblin_hp > 0:
-        print(f"\nGoblin HP: {goblin_hp}")
-        print("\nYour turn!")
-        print("1. Attack")
-        print("2. Run away")
-        print()
-
-        choice = prompt_menu_choice("What do you do? ", 2)
-        if choice == 1:
-            attack = roll(20, 1)
-            if attack >= 10:
-                damage = roll(4, 1)
-                goblin_hp -= damage
-                print(f"You hit for {damage} damage!")
-            else:
-                print("You missed!")
-        elif choice == 2:
-            return False
-
-    return True
-
-
 def main() -> None:
     """Run the main game loop."""
     player = create_character()
@@ -137,14 +105,15 @@ def main() -> None:
         choice = prompt_menu_choice("Enter choice (1-3): ", 3)
 
         if choice == 1:
-            victory = simple_combat(player)
+            enemy = Enemy("Goblin", 5)
+            combat = Combat(player, enemy)
+            victory = combat.start()
             if victory:
                 print("You defeated the goblin!")
-            else:
+            elif player.is_alive():
                 print("You ran away!")
-        elif choice == 2:
-            display_character(player)
-        elif choice == 3:
+            else:
+                print("Game Over!")
             break
 
 
