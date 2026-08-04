@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dndgame.character import Character
+from dndgame.entity import Entity
 from dndgame.dice import roll
 
 
@@ -14,19 +14,19 @@ class Combat:
         initiative_order: Turn order determined by initiative rolls.
     """
 
-    def __init__(self, player: Character, enemy: Character) -> None:
+    def __init__(self, player: Entity, enemy: Entity) -> None:
         """Initialize a combat encounter.
 
         Args:
             player: The player's character.
             enemy: The opposing character.
         """
-        self.player: Character = player
-        self.enemy: Character = enemy
+        self.player: Entity = player
+        self.enemy: Entity = enemy
         self.round: int = 0
-        self.initiative_order: list[Character] = []
+        self.initiative_order: list[Entity] = []
 
-    def roll_initiative(self) -> list[Character]:
+    def roll_initiative(self) -> list[Entity]:
         """Roll initiative for combat order.
 
         Both combatants roll a d20 plus their DEX modifier. The higher
@@ -45,7 +45,7 @@ class Combat:
 
         return self.initiative_order
 
-    def attack(self, attacker: Character, defender: Character) -> int:
+    def attack(self, attacker: Entity, defender: Entity) -> int:
         """Resolve one attack from attacker against defender.
 
         Rolls a d20 plus the attacker's STR modifier against the
