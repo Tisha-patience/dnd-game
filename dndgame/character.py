@@ -5,6 +5,21 @@ from typing import Dict
 from dndgame.dice import roll
 
 
+RACIAL_BONUSES: dict[str, dict[str, int]] = {
+    "Dwarf": {"CON": 2},
+    "Elf": {"DEX": 2},
+    "Human": {
+        "STR": 1,
+        "DEX": 1,
+        "CON": 1,
+        "INT": 1,
+        "WIS": 1,
+        "CHA": 1,
+    },
+    "Tiefling": {"CHA": 2, "INT": 1},
+}
+
+
 class Character:
     """Represent a playable character in the game.
 
@@ -65,14 +80,12 @@ class Character:
     def apply_racial_bonuses(self) -> None:
         """Apply racial bonuses to the character's ability scores.
 
-        Supported races are Dwarf, Elf, and Human. Dwarf increases
-        Constitution, Elf increases Dexterity, and Human increases all
-        statistics by one.
+        The bonus mapping is looked up by race name and applied generically
+        to each listed ability score.
         """
-        if self.race == "Dwarf":
-            self.stats["CON"] += 2
-        elif self.race == "Elf":
-            self.stats["DEX"] += 2
-        elif self.race == "Human":
-            for stat in self.stats:
-                self.stats[stat] += 1
+        bonuses = RACIAL_BONUSES.get(self.race)
+        if bonuses is None:
+            return
+
+        for stat, bonus in bonuses.items():
+            self.stats[stat] += bonus

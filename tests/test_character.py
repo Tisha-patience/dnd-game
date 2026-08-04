@@ -31,3 +31,21 @@ def test_apply_racial_bonuses_updates_the_expected_stats() -> None:
     character.apply_racial_bonuses()
 
     assert character.stats["DEX"] == 12
+
+
+def test_apply_racial_bonuses_supports_new_race_mapping() -> None:
+    """A race added to the bonus mapping should apply its bonuses automatically."""
+    character = Character("Mira", "Tiefling", 10)
+    character.stats = {
+        "STR": 10,
+        "DEX": 10,
+        "CON": 10,
+        "INT": 10,
+        "WIS": 10,
+        "CHA": 10,
+    }
+
+    character.apply_racial_bonuses()
+
+    assert character.stats["CHA"] == 12
+    assert character.stats["INT"] == 11

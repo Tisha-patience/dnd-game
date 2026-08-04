@@ -1,4 +1,4 @@
-from dndgame.character import Character
+from dndgame.character import Character, RACIAL_BONUSES
 from dndgame.dice import roll
 
 
@@ -7,12 +7,15 @@ def create_character():
     name = input("Enter your character's name: ")
 
     print("\nChoose your race:")
-    print("1. Human (+1 to all stats)")
-    print("2. Elf (+2 DEX)")
-    print("3. Dwarf (+2 CON)")
-    race_choice = input("Enter choice (1-3): ")
+    for index, race_name in enumerate(RACIAL_BONUSES, start=1):
+        bonuses = RACIAL_BONUSES[race_name]
+        bonus_text = ", ".join(f"+{amount} {stat}" for stat, amount in bonuses.items())
+        print(f"{index}. {race_name} ({bonus_text})")
+
+    race_choice = input("Enter choice (1-{}): ".format(len(RACIAL_BONUSES)))
     print("\n")
-    race = ["Human", "Elf", "Dwarf"][int(race_choice) - 1]
+    race_names = list(RACIAL_BONUSES)
+    race = race_names[int(race_choice) - 1]
 
     character = Character(name, race, 10)
     character.roll_stats()
