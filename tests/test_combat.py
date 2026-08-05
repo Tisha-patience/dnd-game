@@ -71,3 +71,43 @@ def test_roll_initiative_enemy_goes_first_on_higher_roll() -> None:
         order = combat.roll_initiative()
 
     assert order == [combat.enemy, combat.player]
+
+
+def test_start_player_wins_in_one_hit() -> None:
+    """If the player's first attack kills the enemy, start() returns True."""
+    combat = Combat(make_player(), make_enemy())
+
+    with patch("builtins.input", side_effect=["1"]), \
+         patch("dndgame.combat.roll", side_effect=[15, 6]):
+        result = combat.start()
+
+    assert result is True
+    assert combat.enemy.hp <= 0
+    assert combat.player.hp == combat.player.max_hp
+
+
+def test_start_player_loses() -> None:
+    """If the enemy's attacks reduce the player to 0 HP, start() returns False."""
+    combat = Combat(make_player(), make_enemy())
+
+    with patch("builtins.input", side_effect=["1", "1"]), \
+         patch(
+             "dndgame.combat.roll",
+             side_effect=[5, 15, 6, 5, 15, 6],
+         ):
+        result = combat.start()
+
+    assert result is False
+    assert not combat.player.is_alive()
+
+
+def test_start_player_runs_away() -> None:
+    """Choosing to run away should end combat immediately with no damage."""
+    combat = Combat(make_player(), make_enemy())
+
+    with patch("builtins.input", side_effect=["2"]):
+        result = combat.start()
+
+    assert result is False
+    assert combat.player.hp == combat.player.max_hp
+    assert combat.enemy.hp == combat.enemy.max_hp    
