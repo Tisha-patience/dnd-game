@@ -60,9 +60,8 @@ class Combat:
             The amount of damage dealt, or 0 if the attack missed.
         """
         attack_roll = roll(20, 1) + attacker.get_modifier("STR")
-        weapon_max_damage = 6
         if attack_roll >= defender.armor_class:
-            damage = roll(weapon_max_damage, 1)
+            damage = roll(attacker.weapon.damage_die, 1)
             defender.hp -= damage
             return damage
         return 0
