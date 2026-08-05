@@ -111,7 +111,7 @@ def main() -> None:
         choice = prompt_menu_choice("Enter choice (1-3): ", 3)
 
         if choice == 1:
-            enemy = Enemy("Goblin", 5)
+            enemy = Enemy("Goblin", 5, xp_value=10)
             combat = Combat(player, enemy)
             victory = combat.start()
             if victory:

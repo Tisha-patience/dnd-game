@@ -46,6 +46,8 @@ class Character(Entity):
         self.race: str = race
         self.level: int = 1
         self.spellbook: SpellBook = SpellBook()
+        self.xp: int = 0
+        self.xp_to_next_level: int = 100
 
     def roll_stats(self) -> None:
         """Roll ability scores and initialize hit points.
@@ -73,3 +75,18 @@ class Character(Entity):
             stat: value + bonuses.get(stat, 0)
             for stat, value in self.stats.items()
         }
+
+    def gain_xp(self, amount: int) -> None:
+        """Award XP and level up if the threshold is reached.
+
+        Args:
+            amount: The amount of XP to award.
+        """
+        self.xp += amount
+        if self.xp >= self.xp_to_next_level:
+            self.level += 1
+            self.max_hp += 5
+            self.hp = self.max_hp
+            self.xp -= self.xp_to_next_level
+            self.xp_to_next_level += 50
+            print(f"Level up! {self.name} is now level {self.level}.")

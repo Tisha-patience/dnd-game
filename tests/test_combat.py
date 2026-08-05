@@ -22,7 +22,7 @@ def make_player() -> Character:
 
 def make_enemy() -> Enemy:
     """Build an Enemy with fixed, known stats for testing."""
-    return Enemy("Goblin", 5)
+    return Enemy("Goblin", 5, xp_value=10)
 
 
 def test_attack_hits_and_deals_damage() -> None:

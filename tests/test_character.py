@@ -49,3 +49,31 @@ def test_apply_racial_bonuses_supports_new_race_mapping() -> None:
 
     assert character.stats["CHA"] == 12
     assert character.stats["INT"] == 11
+
+
+def test_gain_xp_below_threshold_does_not_level_up() -> None:
+    """Gaining XP below the threshold should not trigger a level up."""
+    character = Character("Hero", "Human", 10)
+    character.max_hp = character.hp = 10
+
+    character.gain_xp(30)
+
+    assert character.xp == 30
+    assert character.level == 1
+    assert character.max_hp == 10
+    assert character.hp == 10
+
+
+def test_gain_xp_at_threshold_levels_up_and_heals() -> None:
+    """Reaching the XP threshold should level up, boost max HP, and heal."""
+    character = Character("Hero", "Human", 10)
+    character.max_hp = 10
+    character.hp = 4  # simulate a damaged character before leveling up
+
+    character.gain_xp(100)
+
+    assert character.level == 2
+    assert character.max_hp == 15
+    assert character.hp == 15
+    assert character.xp == 0
+    assert character.xp_to_next_level == 150

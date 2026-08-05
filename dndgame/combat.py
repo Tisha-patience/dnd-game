@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dndgame.character import Character
+from dndgame.enemy import Enemy
 from dndgame.entity import Entity
 from dndgame.dice import roll
 
@@ -15,7 +16,7 @@ class Combat:
         initiative_order: Turn order determined by initiative rolls.
     """
 
-    def __init__(self, player: Character, enemy: Entity) -> None:
+    def __init__(self, player: Character, enemy: Enemy) -> None:
         """Initialize a combat encounter.
 
         Args:
@@ -23,7 +24,7 @@ class Combat:
             enemy: The opposing character.
         """
         self.player: Character = player
-        self.enemy: Entity = enemy
+        self.enemy: Enemy = enemy
         self.round: int = 0
         self.initiative_order: list[Entity] = []
 
@@ -112,6 +113,7 @@ class Combat:
 
             if not self.enemy.is_alive():
                 print(f"{self.enemy.name} was defeated!")
+                self.player.gain_xp(self.enemy.xp_value)
                 return True
 
             damage = self.attack(self.enemy, self.player)
