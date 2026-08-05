@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any
+from dndgame.entity import Entity
 
 
 class Spell:
@@ -27,16 +27,21 @@ class Spell:
         self.school = school
         self.spell_power = spell_power
 
-    def cast(self, caster: Any, target: Any) -> None:
+    def cast(self, caster: Entity, target: Entity) -> int:
         """Cast this spell from a caster onto a target.
 
-        This is currently a placeholder with no implemented effect.
+        Spells in this simplified system always hit and deal flat damage
+        equal to the spell's spell_power directly to the target's HP.
 
         Args:
             caster: The character casting the spell.
             target: The character the spell is cast on.
+
+        Returns:
+            The amount of damage dealt.
         """
-        pass
+        target.hp -= self.spell_power
+        return self.spell_power
 
 
 class SpellBook:

@@ -3,7 +3,7 @@ from unittest.mock import patch
 from dndgame.character import Character
 from dndgame.combat import Combat
 from dndgame.enemy import Enemy
-
+from dndgame.spells import Spell
 
 def make_player() -> Character:
     """Build a player Character with fixed, known stats for testing."""
@@ -105,9 +105,22 @@ def test_start_player_runs_away() -> None:
     """Choosing to run away should end combat immediately with no damage."""
     combat = Combat(make_player(), make_enemy())
 
-    with patch("builtins.input", side_effect=["2"]):
+    with patch("builtins.input", side_effect=["3"]):
         result = combat.start()
 
     assert result is False
     assert combat.player.hp == combat.player.max_hp
-    assert combat.enemy.hp == combat.enemy.max_hp    
+    assert combat.enemy.hp == combat.enemy.max_hp
+
+
+def test_start_player_casts_spell_and_wins() -> None:
+    """If the player's spell kills the enemy, start() returns True."""
+    player = make_player()
+    player.spellbook.add_spell(Spell("Firebolt", 1, "Evocation", 5))
+    combat = Combat(player, make_enemy())
+
+    with patch("builtins.input", side_effect=["2"]):
+        result = combat.start()
+
+    assert result is True
+    assert combat.enemy.hp <= 0    

@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Dict
 
 from dndgame.dice import roll
+from dndgame.spells import SpellBook
 
 from .entity import Entity
 
@@ -44,7 +45,7 @@ class Character(Entity):
         super().__init__(name, base_hp)
         self.race: str = race
         self.level: int = 1
-        
+        self.spellbook: SpellBook = SpellBook()
 
     def roll_stats(self) -> None:
         """Roll ability scores and initialize hit points.

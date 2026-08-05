@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from dndgame.character import Character
 from dndgame.entity import Entity
 from dndgame.dice import roll
 
@@ -14,14 +15,14 @@ class Combat:
         initiative_order: Turn order determined by initiative rolls.
     """
 
-    def __init__(self, player: Entity, enemy: Entity) -> None:
+    def __init__(self, player: Character, enemy: Entity) -> None:
         """Initialize a combat encounter.
 
         Args:
             player: The player's character.
             enemy: The opposing character.
         """
-        self.player: Entity = player
+        self.player: Character = player
         self.enemy: Entity = enemy
         self.round: int = 0
         self.initiative_order: list[Entity] = []
@@ -76,14 +77,33 @@ class Combat:
             print(f"{self.player.name} HP: {self.player.hp}")
 
             print("\n1. Attack")
-            print("2. Run away")
+            print("2. Cast Spell")
+            print("3. Run away")
 
-            choice = int(input("Choice: "))
+            while True:
+                try:
+                    choice = int(input("Choice: "))
+                except ValueError:
+                    print("Please enter a number.")
+                    continue
 
-            if choice == 2:
-                return False
+                if choice == 3:
+                    return False
 
-            damage = self.attack(self.player, self.enemy)
+                if choice == 2 and not self.player.spellbook.spells:
+                    print("You have no spells ready to cast.")
+                    continue
+
+                if choice in {1, 2}:
+                    break
+
+                print("Please enter a valid choice.")
+
+            if choice == 1:
+                damage = self.attack(self.player, self.enemy)
+            else:
+                spell = self.player.spellbook.spells[0]
+                damage = spell.cast(self.player, self.enemy)
 
             if damage:
                 print(f"You hit for {damage} damage!")

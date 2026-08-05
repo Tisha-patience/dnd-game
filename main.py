@@ -5,6 +5,7 @@ from typing import Any
 from dndgame.character import Character, RACIAL_BONUSES
 from dndgame.dice import roll
 from dndgame.enemy import Enemy
+from dndgame.spells import Spell
 from dndgame.weapon import Weapon
 from dndgame.combat import Combat
 
@@ -77,6 +78,7 @@ def create_character() -> Character:
 
     character = Character(name, race, 10)
     character.weapon = Weapon("Longsword", 8)
+    character.spellbook.add_spell(Spell("Firebolt", 1, "Evocation", 5))
     character.roll_stats()
     character.apply_racial_bonuses()
     return character

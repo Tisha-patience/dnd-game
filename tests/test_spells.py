@@ -1,5 +1,7 @@
 import pytest
 from dndgame.spells import Spell, SpellBook
+from dndgame.entity import Entity
+
 
 
 def test_spell_creation():
@@ -60,9 +62,13 @@ def test_empty_spellbook_available_spells():
     assert len(available) == 0
 
 
-def test_spell_cast():
-    """Test spell cast method (currently a placeholder)."""
-    spell = Spell("Test Spell", 1, "Test", 1)
-    # Since cast() is currently a placeholder that does nothing,
-    # we just verify it can be called without raising an exception
-    spell.cast(None, None)
+def test_spell_cast_deals_flat_damage_equal_to_spell_power() -> None:
+    """Casting a spell should deal damage equal to its spell_power."""
+    caster = Entity("Caster", 10)
+    target = Entity("Target", 10)
+    spell = Spell("Firebolt", 1, "Evocation", 5)
+
+    damage = spell.cast(caster, target)
+
+    assert damage == 5
+    assert target.hp == 5
