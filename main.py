@@ -112,6 +112,7 @@ def main() -> None:
 
         if choice == 1:
             enemy = Enemy("Goblin", 5, xp_value=10)
+            # You can optionally pass DungeonMaster() here once you have an OPENAI_API_KEY configured.
             combat = Combat(player, enemy)
             victory = combat.start()
             if victory:

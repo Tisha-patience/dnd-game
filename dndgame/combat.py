@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dndgame.character import Character
+from dndgame.dungeon_master import DungeonMaster
 from dndgame.enemy import Enemy
 from dndgame.entity import Entity
 from dndgame.dice import roll
@@ -16,15 +17,22 @@ class Combat:
         initiative_order: Turn order determined by initiative rolls.
     """
 
-    def __init__(self, player: Character, enemy: Enemy) -> None:
+    def __init__(
+        self,
+        player: Character,
+        enemy: Enemy,
+        dungeon_master: DungeonMaster | None = None,
+    ) -> None:
         """Initialize a combat encounter.
 
         Args:
             player: The player's character.
             enemy: The opposing character.
+            dungeon_master: Optional AI narrator for combat actions.
         """
         self.player: Character = player
         self.enemy: Enemy = enemy
+        self.dungeon_master: DungeonMaster | None = dungeon_master
         self.round: int = 0
         self.initiative_order: list[Entity] = []
 
@@ -102,14 +110,35 @@ class Combat:
 
             if choice == 1:
                 damage = self.attack(self.player, self.enemy)
+                if self.dungeon_master is not None:
+                    print(
+                        self.dungeon_master.narrate_action(
+                            self.player.name,
+                            "attacks",
+                            self.enemy.name,
+                            damage,
+                        )
+                    )
+                elif damage:
+                    print(f"You hit for {damage} damage!")
+                else:
+                    print("You missed!")
             else:
                 spell = self.player.spellbook.spells[0]
                 damage = spell.cast(self.player, self.enemy)
-
-            if damage:
-                print(f"You hit for {damage} damage!")
-            else:
-                print("You missed!")
+                if self.dungeon_master is not None:
+                    print(
+                        self.dungeon_master.narrate_action(
+                            self.player.name,
+                            f"casts {spell.name}",
+                            self.enemy.name,
+                            damage,
+                        )
+                    )
+                elif damage:
+                    print(f"You hit for {damage} damage!")
+                else:
+                    print("You missed!")
 
             if not self.enemy.is_alive():
                 print(f"{self.enemy.name} was defeated!")
@@ -118,7 +147,16 @@ class Combat:
 
             damage = self.attack(self.enemy, self.player)
 
-            if damage:
+            if self.dungeon_master is not None:
+                print(
+                    self.dungeon_master.narrate_action(
+                        self.enemy.name,
+                        "attacks",
+                        self.player.name,
+                        damage,
+                    )
+                )
+            elif damage:
                 print(f"{self.enemy.name} hits you for {damage} damage!")
             else:
                 print(f"{self.enemy.name} misses!")

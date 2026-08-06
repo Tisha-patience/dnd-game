@@ -124,3 +124,19 @@ def test_start_player_casts_spell_and_wins() -> None:
 
     assert result is True
     assert combat.enemy.hp <= 0    
+
+
+def test_start_uses_dungeon_master_narration_when_provided() -> None:
+    """When a dungeon_master is set, its narration should be used instead of plain text."""
+    from unittest.mock import MagicMock
+
+    mock_dm = MagicMock()
+    mock_dm.narrate_action.return_value = "A fireball scorches the goblin!"
+
+    combat = Combat(make_player(), make_enemy(), dungeon_master=mock_dm)
+
+    with patch("builtins.input", side_effect=["1"]), \
+         patch("dndgame.combat.roll", side_effect=[15, 6]):
+        combat.start()
+
+    mock_dm.narrate_action.assert_called()    

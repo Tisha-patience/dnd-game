@@ -52,6 +52,26 @@ mypy dndgame --strict
 black .
 ```
 
+## Optional: AI-Narrated Combat
+
+The game supports AI-narrated combat via OpenAI's API. This is fully
+optional — the game works normally with plain text combat messages
+without it.
+
+To enable it:
+1. Create a `.env` file in the project root (never commit this file):
+2. In `main.py`, pass a `DungeonMaster()` instance when creating combat:
+```python
+   from dndgame.dungeon_master import DungeonMaster
+   combat = Combat(player, enemy, dungeon_master=DungeonMaster())
+```
+
+If the API call fails for any reason (missing key, network issue,
+rate limit), combat automatically falls back to the standard plain
+text messages — the game will never crash because of this feature.
+
+
+
 ## Additional Resources
 
 - [Python Type Hints Documentation](https://docs.python.org/3/library/typing.html)
